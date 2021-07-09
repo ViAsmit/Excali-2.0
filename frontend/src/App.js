@@ -11,7 +11,7 @@ export default function App() {
   // const [msg, setmsg] = useState("");
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    setInterval(() => {
       console.log("Logs every second");
       getImage();
     }, 10000);
@@ -26,7 +26,7 @@ export default function App() {
     window.addEventListener("hashchange", onHashChange, false);
     return () => {
       window.removeEventListener("hashchange", onHashChange);
-      clearInterval(interval);
+      // clearInterval(interval);
     };
   }, []);
 
@@ -45,7 +45,7 @@ export default function App() {
     var formData = new FormData();
     formData.append("file", blob);
     axios
-      .post("http://localhost:5000/upload", formData, {
+      .post("https://excali-demo.herokuapp.com/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -75,6 +75,11 @@ export default function App() {
           name="Custom name of drawing"
           UIOptions={{ canvasActions: { loadScene: false } }}
         />
+      </div>
+      <div className="export-wrapper button-wrapper">
+        <button onClick={getImage}>Save Now!</button>
+        <p>Automatic Saving is 10 sec</p>
+        <div className="export export-svg"></div>
       </div>
     </div>
   );
