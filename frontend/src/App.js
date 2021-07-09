@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Excalidraw, { exportToBlob } from "@excalidraw/excalidraw";
 import InitialData from "./initialData";
 import axios from "axios";
@@ -6,32 +6,15 @@ import axios from "axios";
 import "./styles.scss";
 import initialData from "./initialData";
 
-const renderTopRightUI = () => {
-  return (
-    <button onClick={() => alert("This is dummy top right UI")}>
-      {" "}
-      Click me{" "}
-    </button>
-  );
-};
-
-const renderFooter = () => {
-  return (
-    <button onClick={() => alert("This is dummy footer")}>
-      {" "}
-      custom footer{" "}
-    </button>
-  );
-};
-
 export default function App() {
   const excalidrawRef = useRef(null);
-  const [blobUrl, setBlobUrl] = useState(null);
+  // const [msg, setmsg] = useState("");
 
   useEffect(() => {
     const interval = setInterval(() => {
       console.log("Logs every second");
-    }, 1000);
+      getImage();
+    }, 10000);
 
     const onHashChange = () => {
       const hash = new URLSearchParams(window.location.hash.slice(1));
@@ -55,7 +38,10 @@ export default function App() {
         ...initialData.appState,
       },
     });
-    setBlobUrl(window.URL.createObjectURL(blob));
+    // setBlobUrl(window.URL.createObjectURL(blob));
+    // setmsg(
+    //   "Image Uploaded Successfully. Visit https://excali-demo.herokuapp.com/files/ to see all saved photos"
+    // );
     var formData = new FormData();
     formData.append("file", blob);
     axios
@@ -71,6 +57,10 @@ export default function App() {
   return (
     <div className="App">
       <h1> Excalidraw Example</h1>
+      <a href="/files">Click to view saved states</a>
+      <br />
+      <b>Important:-</b> To Download any image locally. Go to{" "}
+      <b>/files/:filename </b> to download on your computer
       <div className="excalidraw-wrapper">
         <Excalidraw
           ref={excalidrawRef}
@@ -84,24 +74,7 @@ export default function App() {
           }
           name="Custom name of drawing"
           UIOptions={{ canvasActions: { loadScene: false } }}
-          renderTopRightUI={renderTopRightUI}
-          renderFooter={renderFooter}
         />
-      </div>
-
-      <div className="export-wrapper button-wrapper">
-        <button
-          onClick={() => {
-            console.log("ddd");
-          }}
-        >
-          Export to Server
-        </button>
-
-        <button onClick={getImage}>Export to Blob</button>
-        <div className="export export-blob">
-          <img src={blobUrl} alt="" />
-        </div>
       </div>
     </div>
   );
